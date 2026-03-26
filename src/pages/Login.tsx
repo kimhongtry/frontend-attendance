@@ -1,92 +1,65 @@
-import { useState } from "react";
-import API from "../api/axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const [username, setUsername] = useState("");
+const Login: React.FC = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
     try {
-      const res = await API.post("/api/auth/login", {
-        email: username,
-        password,
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
-      console.log(res.data);
+      const data = await response.json();
 
-      // save token
-      localStorage.setItem("token", res.data.token);
-
-      alert("Login success 🚀");
-      // TODO: redirect to dashboard
-      navigate("/dashboard");
-    } catch (error) {
-      console.error(error);
-      alert("Login failed ❌");
+      if (response.ok && data.token) {
+        localStorage.setItem("admin_token", data.token);
+        navigate("/dashboard");
+      } else {
+        alert(data.message || "Login failed");
+      }
+    } catch (err) {
+      alert("Cannot connect to server. Is it running on port 5000?");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-600">
-      <div className="bg-white w-[400px] rounded-2xl shadow-lg p-8">
-        {/* Icon */}
-        <div className="flex justify-center mb-4">
-          <div className="w-12 h-12 flex items-center justify-center bg-purple-500 text-white rounded-full text-xl">
-            🛡️
-          </div>
-        </div>
-
-        {/* Title */}
-        <h2 className="text-2xl font-bold text-center mb-1">
-          Teacher Attendance
-        </h2>
-        <p className="text-center text-gray-500 mb-6">
-          Sign in to access the system
-        </p>
-
-        {/* Username */}
-        <div className="mb-4">
-          <label className="block text-sm mb-1">Username</label>
-          <input
-            type="text"
-            placeholder="Enter your username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-        </div>
-
-        {/* Password */}
-        <div className="mb-4 relative">
-          <label className="block text-sm mb-1">Password</label>
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-
-          {/* Show/Hide */}
-          <span
-            className="absolute right-3 top-9 cursor-pointer text-gray-500"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            👁️
-          </span>
-        </div>
-
-        {/* Button */}
-        <button
-          onClick={handleLogin}
-          className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
-        >
-          → Sign In
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form
+        onSubmit={handleLogin}
+        className="bg-white p-8 rounded shadow-md w-96"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center">Admin Login</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          required
+          className="w-full p-2 mb-4 border rounded"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          required
+          className="w-full p-2 mb-6 border rounded"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+          {loading ? "Loading..." : "Login"}
         </button>
-      </div>
+      </form>
     </div>
   );
 };

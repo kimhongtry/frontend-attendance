@@ -7,25 +7,32 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
-  const isLoggedIn = true; // replace with your auth logic
+  // Real Auth Check: If token exists, user is "logged in"
+  const isLoggedIn = !!localStorage.getItem("admin_token");
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
 
+        {/* Protected Routes Wrapper */}
         <Route
           path="/"
-          element={isLoggedIn ? <Layout /> : <Navigate to="/login" />}
+          element={isLoggedIn ? <Layout /> : <Navigate to="/login" replace />}
         >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="teachers" element={<Teachers />} />
           <Route path="attendance" element={<Attendance />} />
           <Route path="reports" element={<Reports />} />
-          <Route index element={<Navigate to="dashboard" />} />
+          <Route index element={<Navigate to="dashboard" replace />} />
         </Route>
 
-        <Route path="*" element={<h1>Page Not Found</h1>} />
+        <Route
+          path="*"
+          element={
+            <h1 className="p-10 text-center text-2xl">404: Page Not Found</h1>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
