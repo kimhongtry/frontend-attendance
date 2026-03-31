@@ -5,6 +5,8 @@ import Reports from "./pages/Reports";
 import Layout from "./components/layout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import TeacherCheckIn from "./pages/TeacherCheck-In";
+import PublicCheckIn from "./pages/PublicChek-In";
 
 function App() {
   // Real Auth Check: If token exists, user is "logged in"
@@ -13,6 +15,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* The URL the QR code will point to */}
+        <Route path="/checkin" element={<PublicCheckIn />} />
+
         <Route path="/login" element={<Login />} />
 
         {/* Protected Routes Wrapper */}
@@ -24,6 +29,7 @@ function App() {
           <Route path="teachers" element={<Teachers />} />
           <Route path="attendance" element={<Attendance />} />
           <Route path="reports" element={<Reports />} />
+          <Route path="check-in" element={<TeacherCheckIn />} />
           <Route index element={<Navigate to="dashboard" replace />} />
         </Route>
 
