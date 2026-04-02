@@ -6,7 +6,7 @@ import Layout from "./components/layout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import TeacherCheckIn from "./pages/TeacherCheck-In";
-import PublicCheckIn from "./pages/PublicChek-In";
+import PublicCheckIn from "./pages/PublicCheck-In";
 
 function App() {
   // Real Auth Check: If token exists, user is "logged in"
