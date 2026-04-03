@@ -1,68 +1,89 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import StatCard from '../components/StatCard';
 
 const Dashboard = () => {
-  // Static data for mockups
-  const attendanceData = [
-    { name: 'Dara', status: 'Present', time: '8:05 AM', date: 'Mar 10' },
-    { name: 'Lina', status: 'Absent', time: '-', date: 'Mar 10' },
-    { name: 'Vanna', status: 'Present', time: '8:12 AM', date: 'Mar 10' },
-    { name: 'Sophea', status: 'Permission', time: '9:00 AM', date: 'Mar 10' },
-    { name: 'Bopha', status: 'Present', time: '8:18 AM', date: 'Mar 10' },
-  ];
+  const [dashboardData, setDashboardData] = useState({
+    totalTeachers: 0,
+    presentToday: 0,
+    absentToday: 0,
+    permissionToday: 0,
+    records: []
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem('admin_token');
+        if (!token) return;
+
+        const response = await axios.get('http://localhost:5000/api/dashboard/stats', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.data.success) {
+          // This updates the cards AND the table records
+          setDashboardData(response.data.data);
+        }
+      } catch (error) {
+        console.error("Fetch Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+const rawRate = dashboardData.totalTeachers > 0 
+  ? Math.round((dashboardData.presentToday / dashboardData.totalTeachers) * 100) 
+  : 0;
+
+  // This line ensures the rate never goes above 100%
+  const attendanceRate = Math.min(rawRate, 100);
+
+  if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen font-sans">
-      
-      {/* --- Dashboard Header Section --- */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-        <p className="text-gray-500">Overview of teacher attendance for today</p>
-      </div>
-
-      {/* 1. Stats Row */}
+    <div className="p-8 bg-gray-50 min-h-screen">
+      {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <StatCard title="Total Teachers" value="12" trend="+0% from last week" icon="👤" iconBg="bg-blue-500" />
-        <StatCard title="Present Today" value="10" trend="+10% from last week" trendType="up" icon="✓" iconBg="bg-green-500" />
-        <StatCard title="Absent" value="1" trend="-5% from last week" trendType="down" icon="✕" iconBg="bg-red-500" />
-        <StatCard title="Permission" value="1" trend="0% from last week" icon="🕒" iconBg="bg-yellow-500" />
+        <StatCard title="Total Teachers" value={dashboardData.totalTeachers.toString()} trend="+0%" icon="👤" iconBg="bg-blue-500" />
+        <StatCard title="Present Today" value={dashboardData.presentToday.toString()} trend="+0%" icon="✓" iconBg="bg-green-500" />
+        <StatCard title="Absent" value={dashboardData.absentToday.toString()} trend="+0%" icon="✕" iconBg="bg-red-500" />
+        <StatCard title="Permission" value={dashboardData.permissionToday.toString()} trend="+0%" icon="🕒" iconBg="bg-yellow-500" />
       </div>
 
-      {/* 2. Progress Bar Section */}
+      {/* Progress Bar */}
       <div className="bg-white p-6 rounded-xl shadow-sm mb-8 border border-gray-100">
         <h3 className="text-gray-700 font-bold mb-4">Today's Attendance Rate</h3>
         <div className="flex justify-between items-end mb-2">
-          <span className="text-4xl font-black text-gray-800">83%</span>
-          <span className="text-sm text-gray-500">10 out of 12 teachers</span>
+          <span className="text-4xl font-black text-gray-800">{attendanceRate}%</span>
+          <span className="text-sm text-gray-500">{dashboardData.presentToday} out of {dashboardData.totalTeachers}</span>
         </div>
         <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
-          <div className="bg-indigo-600 h-full rounded-full transition-all duration-500" style={{ width: '83%' }}></div>
+          <div className="bg-indigo-600 h-full transition-all duration-700" style={{ width: `${attendanceRate}%` }}></div>
         </div>
       </div>
 
-      {/* 3. Recent Attendance Table */}
+      {/* Recent Attendance Table */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <div className="flex justify-between items-center mb-4">
-            <h3 className="text-gray-700 font-bold">Recent Attendance</h3>
-            <button className="text-indigo-600 text-sm font-semibold hover:underline">View All</button>
-        </div>
+        <h3 className="text-gray-700 font-bold mb-4">Recent Attendance</h3>
         <table className="w-full text-left">
           <thead>
             <tr className="text-gray-400 text-sm border-b border-gray-100">
               <th className="pb-4 font-medium">Teacher</th>
               <th className="pb-4 font-medium">Status</th>
-              <th className="pb-4 font-medium">Check-in Time</th>
+              <th className="pb-4 font-medium">Time</th>
               <th className="pb-4 font-medium">Date</th>
             </tr>
           </thead>
-          <tbody className="text-gray-700">
-            {attendanceData.map((row, idx) => (
-              <tr key={idx} className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
+          <tbody>
+            {dashboardData.records.map((row: any, idx: number) => (
+              <tr key={idx} className="border-b border-gray-50 last:border-0 hover:bg-gray-50">
                 <td className="py-4 font-medium">{row.name}</td>
                 <td className="py-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-bold text-white 
-                    ${row.status === 'Present' ? 'bg-green-500' : 
-                      row.status === 'Absent' ? 'bg-red-500' : 'bg-yellow-500'}`}>
+                    ${row.status === 'Present' ? 'bg-green-500' : row.status === 'Absent' ? 'bg-red-500' : 'bg-yellow-500'}`}>
                     {row.status}
                   </span>
                 </td>
