@@ -7,17 +7,24 @@ const TeacherCheckIn = () => {
   const token = localStorage.getItem("teacher_token"); // Teachers must login once on their phone
 
   const handleConfirm = async () => {
+    // Check if token exists before trying to fetch
+    if (!token) {
+      toast.error("Please login first!");
+      return;
+    }
+
     setStatus("loading");
-    const tid = toast.loading("Verifying location and identity...");
+    const tid = toast.loading("Verifying identity...");
 
     try {
       const response = await fetch(
-        "http://your-ip-address:5000/api/attendance/qr-checkin",
+        "http://192.168.11.36:5000/api/attendance/qr-checkin", // ✅ Updated to your real IP
+        // "http://localhost:5000/api/attendance/qr-checkin",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Ensure your backend expects 'Bearer'
           },
         },
       );
@@ -27,15 +34,16 @@ const TeacherCheckIn = () => {
         toast.success("Attendance Marked!", { id: tid });
       } else {
         const data = await response.json();
+        // If the backend returns an error (like "Invalid Token"), show it
         toast.error(data.message || "Check-in failed", { id: tid });
         setStatus("idle");
       }
     } catch (err) {
-      toast.error("Network error", { id: tid });
+      console.error("Fetch Error:", err);
+      toast.error("Network error: Cannot reach server", { id: tid });
       setStatus("idle");
     }
   };
-
   return (
     <div className="min-h-screen bg-indigo-900 flex flex-col items-center justify-center p-6 text-white">
       <Toaster />

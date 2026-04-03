@@ -7,7 +7,7 @@ const PublicCheckIn = () => {
   const [hasCheckedIn, setHasCheckedIn] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Check if they already scanned today
+  // ✅ Check if teacher already scanned today
   useEffect(() => {
     const lastDate = localStorage.getItem("last_checkin_date");
     const today = new Date().toISOString().split("T")[0];
@@ -18,14 +18,18 @@ const PublicCheckIn = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (hasCheckedIn) return;
+
+    if (!formData.staffId.trim() || !formData.name.trim()) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
 
     setLoading(true);
     const tid = toast.loading("Recording attendance...");
 
     try {
       const response = await fetch(
-        "http://192.168.11.31:5000/api/attendance/public-checkin",
+        "http://192.168.11.36:5000/api/attendance/public-checkin", // ✅ FIXED: correct route
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -33,24 +37,28 @@ const PublicCheckIn = () => {
         },
       );
 
-      if (response.ok) {
-        // Save today's date to their phone to block a second scan
-        const today = new Date().toISOString().split("T")[0];
-        localStorage.setItem("last_checkin_date", today);
+      const data = await response.json();
 
+      if (response.ok) {
+        localStorage.setItem(
+          "last_checkin_date",
+          new Date().toISOString().split("T")[0],
+        );
         setHasCheckedIn(true);
-        toast.success("Attendance Recorded!", { id: tid });
+        toast.success(data.message || "Attendance Recorded!", { id: tid });
       } else {
-        const data = await response.json();
-        toast.error(data.message || "Submission failed", { id: tid });
+        toast.error(data.message || "Submission failed.", { id: tid });
       }
     } catch (err) {
-      toast.error("Network error", { id: tid });
+      toast.error("Network error: Make sure you are on PSE Wi-Fi.", {
+        id: tid,
+      });
     } finally {
       setLoading(false);
     }
   };
 
+  // ── Already checked in screen ──────────────────────────────
   if (hasCheckedIn) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
@@ -68,6 +76,7 @@ const PublicCheckIn = () => {
     );
   }
 
+  // ── Check-in form ──────────────────────────────────────────
   return (
     <div className="min-h-screen bg-indigo-900 flex flex-col items-center justify-center p-6">
       <Toaster position="top-center" />
@@ -81,12 +90,12 @@ const PublicCheckIn = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-xs font-bold text-gray-400 uppercase">
+            <label className="text-xs font-bold text-gray-400 uppercase tracking-wide">
               Staff ID
             </label>
             <input
               required
-              className="w-full mt-1 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mt-1 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               placeholder="e.g. T-1005"
               value={formData.staffId}
               onChange={(e) =>
@@ -95,12 +104,12 @@ const PublicCheckIn = () => {
             />
           </div>
           <div>
-            <label className="text-xs font-bold text-gray-400 uppercase">
+            <label className="text-xs font-bold text-gray-400 uppercase tracking-wide">
               Full Name
             </label>
             <input
               required
-              className="w-full mt-1 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mt-1 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               placeholder="Enter your name"
               value={formData.name}
               onChange={(e) =>
@@ -113,7 +122,7 @@ const PublicCheckIn = () => {
             disabled={loading}
             className="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition-all disabled:opacity-50 mt-4"
           >
-            {loading ? "Submiting..." : "Confirm Attendance"}
+            {loading ? "Submitting..." : "Confirm Attendance"}
           </button>
         </form>
       </div>
