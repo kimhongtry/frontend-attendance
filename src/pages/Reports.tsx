@@ -6,6 +6,9 @@ import {
   DocumentArrowDownIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
+import * as XLSX from "xlsx";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const BASE_URL = "http://192.168.11.36:5000";
 
@@ -36,6 +39,7 @@ interface WeeklyReport {
   records: WeeklyRecord[];
 }
 
+
 // ── Helpers ────────────────────────────────────────────────────────────
 const getWeekRange = () => {
   const today = new Date();
@@ -50,6 +54,7 @@ const getWeekRange = () => {
   };
 };
 
+
 const formatDate = (dateStr: string) =>
   new Date(dateStr).toLocaleDateString("en-US", {
     month: "long",
@@ -57,6 +62,7 @@ const formatDate = (dateStr: string) =>
     year: "numeric",
   });
 
+  
 const formatWeekRange = (start: string, end: string) => {
   const s = new Date(start).toLocaleDateString("en-US", {
     month: "long",
@@ -85,6 +91,58 @@ const ReportsPage = () => {
   const [dailyLoading, setDailyLoading] = useState(true);
   const [weeklyLoading, setWeeklyLoading] = useState(true);
   const [sendingTelegram, setSendingTelegram] = useState(false);
+
+  // --- EXCEL EXPORT LOGIC ---
+  const handleExportExcel = () => {
+    if (!sortedWeekly || sortedWeekly.length === 0) {
+      toast.error("No data available to export.");
+      return;
+    }
+
+    // Map the data to clean headers for Excel
+    const dataToExport = sortedWeekly.map(row => {
+      const total = row.present + row.absent + row.permission;
+      const rate = total > 0 ? Math.round((row.present / total) * 100) : 0;
+      return {
+        "Teacher Name": row.teacherName,
+        "Present Days": row.present,
+        "Absent Days": row.absent,
+        "Permission": row.permission,
+        "Attendance Rate": `${rate}%`
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Weekly Report");
+    XLSX.writeFile(workbook, `Weekly_Attendance_${weekStart}.xlsx`);
+  };
+
+  // --- PDF EXPORT LOGIC ---
+  const handleExportPDF = () => {
+    if (!sortedWeekly || sortedWeekly.length === 0) {
+      toast.error("No data available to export.");
+      return;
+    }
+
+    const doc = new jsPDF();
+    doc.text("Weekly Teacher Attendance Report", 14, 15);
+    doc.setFontSize(10);
+    doc.text(`Period: ${weekStart} to ${weekEnd}`, 14, 22);
+
+    autoTable(doc, {
+      startY: 30,
+      head: [['Teacher Name', 'Present', 'Absent', 'Permission', 'Rate']],
+      body: sortedWeekly.map(row => {
+        const total = row.present + row.absent + row.permission;
+        const rate = total > 0 ? Math.round((row.present / total) * 100) : 0;
+        return [row.teacherName, row.present, row.absent, row.permission, `${rate}%`];
+      }),
+      headStyles: { fillColor: [99, 102, 241] }, // Indigo/Purple theme
+    });
+
+    doc.save(`Weekly_Attendance_${weekStart}.pdf`);
+  };
 
   // ── Fetch daily ──────────────────────────────────────────────────────
   const fetchDaily = useCallback(async () => {
@@ -188,25 +246,33 @@ const ReportsPage = () => {
       <Toaster position="top-right" />
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
-          <p className="text-gray-500 mt-1">
-            View attendance reports and analytics
-          </p>
-        </div>
-        <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2.5 border border-green-200 text-green-600 bg-green-50 rounded-xl font-bold text-sm hover:bg-green-100 transition-colors">
-            <DocumentArrowDownIcon className="w-4 h-4" />
-            Export Excel
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2.5 border border-red-200 text-red-600 bg-red-50 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors">
-            <DocumentArrowDownIcon className="w-4 h-4" />
-            Export PDF
-          </button>
-        </div>
-      </div>
+    <div className="flex justify-between items-start mb-6">
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
+    <p className="text-gray-500 mt-1">
+      View attendance reports and analytics
+    </p>
+  </div>
+  <div className="flex gap-3">
+    {/* Excel Button */}
+    <button 
+      onClick={handleExportExcel}
+      className="flex items-center gap-2 px-4 py-2.5 border border-green-200 text-green-600 bg-green-50 rounded-xl font-bold text-sm hover:bg-green-100 transition-colors"
+    >
+      <DocumentArrowDownIcon className="w-4 h-4" />
+      Export Excel
+    </button>
 
+    {/* PDF Button */}
+    <button 
+      onClick={handleExportPDF}
+      className="flex items-center gap-2 px-4 py-2.5 border border-red-200 text-red-600 bg-red-50 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors"
+    >
+      <DocumentArrowDownIcon className="w-4 h-4" />
+      Export PDF
+    </button>
+  </div>
+</div>
       {/* Alerts */}
       {absentAlert.length > 0 && (
         <div className="bg-orange-50 border border-orange-100 p-4 rounded-xl mb-8 flex items-start gap-3 shadow-sm">
