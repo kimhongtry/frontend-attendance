@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from "react-router-dom"; // REMOVED BrowserRo
 import Layout from "../components/layout";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
-import Profile from "../pages/Profile";
 import { JSX } from "react";
 
 const AdminRoute = ({ children }: { children: JSX.Element }) => {
@@ -26,7 +25,6 @@ const AppRoutes = () => {
       >
         {/* These show up inside the Sidebar's <Outlet /> */}
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profile />} />
       </Route>
 
       {/* 3. REDIRECTS */}
