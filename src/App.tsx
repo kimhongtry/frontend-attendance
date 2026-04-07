@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import TeacherCheckIn from "./pages/TeacherCheck-In";
 import PublicCheckIn from "./pages/PublicCheck-In";
+import ProfilePage from "./pages/Profile";
 
 function App() {
   // Real Auth Check: If token exists, user is "logged in"
@@ -31,6 +32,7 @@ function App() {
           <Route path="reports" element={<Reports />} />
           <Route path="check-in" element={<TeacherCheckIn />} />
           <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="profile" element={<ProfilePage />} />
         </Route>
 
         <Route
