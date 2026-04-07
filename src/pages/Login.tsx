@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShieldCheck, Eye, EyeOff, LogIn, Key } from "lucide-react"; // Install lucide-react or use similar icons
+import { ShieldCheck, Eye, EyeOff, LogIn } from "lucide-react"; // Install lucide-react or use similar icons
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -45,13 +45,19 @@ const Login: React.FC = () => {
           </div>
         </div>
 
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">Teacher Attendance</h2>
-        <p className="text-center text-gray-500 mb-8 font-medium">Sign in to access the system</p>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
+          Teacher Attendance
+        </h2>
+        <p className="text-center text-gray-500 mb-8 font-medium">
+          Sign in to access the system
+        </p>
 
         <form onSubmit={handleLogin} className="space-y-5">
           {/* Email Field */}
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Username</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">
+              Username
+            </label>
             <input
               type="email"
               placeholder="Enter your username"
@@ -64,7 +70,9 @@ const Login: React.FC = () => {
 
           {/* Password Field */}
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">
+              Password
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -85,7 +93,7 @@ const Login: React.FC = () => {
           </div>
 
           {/* Sign In Button */}
-          <button 
+          <button
             disabled={loading}
             className="w-full bg-[#6366f1] text-white py-3.5 rounded-xl font-bold text-lg hover:bg-indigo-700 hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95"
           >
