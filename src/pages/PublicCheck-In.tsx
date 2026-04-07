@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { CheckBadgeIcon } from "@heroicons/react/24/outline";
 
+const BASE_URL = "http://192.168.11.36:5000";
+
 const PublicCheckIn = () => {
   const [formData, setFormData] = useState({ staffId: "", name: "" });
   const [hasCheckedIn, setHasCheckedIn] = useState(false);
@@ -29,7 +31,7 @@ const PublicCheckIn = () => {
 
     try {
       const response = await fetch(
-        "http://192.168.11.36:5000/api/attendance/public-checkin", // ✅ FIXED: correct route
+        `${BASE_URL}/api/attendance/public-checkin`, // ✅ FIXED: correct route
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

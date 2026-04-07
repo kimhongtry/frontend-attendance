@@ -17,6 +17,8 @@ interface Teacher {
   room: string;
 }
 
+const BASE_URL = "http://192.168.11.36:5000";
+
 const TeachersPage = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,7 +40,7 @@ const TeachersPage = () => {
   const fetchTeachers = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/teachers/all", {
+      const response = await fetch(`${BASE_URL}/api/teachers/all`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -95,8 +97,8 @@ const TeachersPage = () => {
 
     // Determine URL and Method based on mode (Edit vs Add)
     const url = editingId
-      ? `http://localhost:5000/api/teachers/${editingId}` // PUT /api/teachers/:id
-      : `http://localhost:5000/api/teachers/add`; // POST /api/teachers/add
+      ? `${BASE_URL}/api/teachers/${editingId}` // PUT /api/teachers/:id
+      : `${BASE_URL}/api/teachers/add`; // POST /api/teachers/add
 
     const method = editingId ? "PUT" : "POST";
 
@@ -177,7 +179,7 @@ const TeachersPage = () => {
   const proceedWithDelete = async (id: number) => {
     const tid = toast.loading("Deleting record...");
     try {
-      const resp = await fetch(`http://localhost:5000/api/teachers/${id}`, {
+      const resp = await fetch(`${BASE_URL}/api/teachers/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

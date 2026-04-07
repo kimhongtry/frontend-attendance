@@ -7,8 +7,6 @@ import {
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
 
-const BASE_URL = "http://192.168.11.36:5000";
-
 // ── Types ──────────────────────────────────────────────────────────────
 interface DailyRecord {
   teacherId: number;
@@ -35,6 +33,8 @@ interface WeeklyReport {
   endDate: string;
   records: WeeklyRecord[];
 }
+
+const BASE_URL = "http://192.168.11.36:5000";
 
 // ── Helpers ────────────────────────────────────────────────────────────
 const getWeekRange = () => {

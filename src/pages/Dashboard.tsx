@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import StatCard from "../components/StatCard";
 
+const BASE_URL = "http://192.168.11.36:5000";
+
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
     totalTeachers: 0,
@@ -18,12 +20,9 @@ const Dashboard = () => {
         const token = localStorage.getItem("admin_token");
         if (!token) return;
 
-        const response = await axios.get(
-          "http://localhost:5000/api/dashboard/stats",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+        const response = await axios.get(`${BASE_URL}/api/dashboard/stats`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (response.data.success) {
           // This updates the cards AND the table records
