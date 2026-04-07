@@ -1,27 +1,29 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
-
-const BASE_URL = import.meta.env.VITE_API_URL || "http://192.168.11.36:5000";
-const token = localStorage.getItem("admin_token");
+import { NavLink, Outlet, Link, useNavigate } from "react-router-dom"; // 1. Added Link and useNavigate
+import { useEffect, useRef, useState } from "react";
 
 const Layout = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // 2. Hook for logout redirection
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const activeClass =
     "flex items-center gap-2 p-2 rounded-lg bg-purple-500 text-white font-semibold";
   const normalClass =
-    "flex items-center gap-2 p-2 rounded-lg hover:bg-purple-200";
+    "flex items-center gap-2 p-2 rounded-lg hover:bg-purple-200 text-gray-700";
 
   const [adminName, setAdminName] = useState("Admin");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  const toggleDropdown = () => setDropdownOpen((open) => !open);
 
   useEffect(() => {
     // Fetch profile on mount
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/api/auth/profile`, {
+        const token = localStorage.getItem("admin_token");
+        if (!token) return;
+
+        const res = await fetch("/api/auth/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -73,40 +75,20 @@ const Layout = () => {
       {/* Sidebar */}
       <div className="w-64 bg-white shadow-md flex flex-col">
         <div className="p-4">
-          <h1 className="text-xl font-bold text-purple-600 mb-6">
+          <h1 className="text-xl font-bold text-purple-600 mb-6 text-center">
             Teacher Attendance
           </h1>
           <nav className="flex flex-col gap-2">
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) =>
-                isActive ? activeClass : normalClass
-              }
-            >
+            <NavLink to="/dashboard" className={({ isActive }) => isActive ? activeClass : normalClass}>
               <span>🏠</span> Dashboard
             </NavLink>
-            <NavLink
-              to="/teachers"
-              className={({ isActive }) =>
-                isActive ? activeClass : normalClass
-              }
-            >
+            <NavLink to="/teachers" className={({ isActive }) => isActive ? activeClass : normalClass}>
               <span>👩‍🏫</span> Teachers
             </NavLink>
-            <NavLink
-              to="/attendance"
-              className={({ isActive }) =>
-                isActive ? activeClass : normalClass
-              }
-            >
+            <NavLink to="/attendance" className={({ isActive }) => isActive ? activeClass : normalClass}>
               <span>📝</span> Attendance
             </NavLink>
-            <NavLink
-              to="/reports"
-              className={({ isActive }) =>
-                isActive ? activeClass : normalClass
-              }
-            >
+            <NavLink to="/reports" className={({ isActive }) => isActive ? activeClass : normalClass}>
               <span>📊</span> Reports
             </NavLink>
           </nav>
@@ -116,58 +98,59 @@ const Layout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Navbar */}
-        <div className="flex items-center justify-end bg-white p-4 shadow-md">
-          {/* Dropdown wrapper — ref for outside click detection */}
+        <div className="flex items-center justify-end bg-white p-4 shadow-sm border-b">
+          
+          {/* Admin Profile Dropdown Container */}
           <div ref={dropdownRef} className="relative">
-            {/* Avatar + Name — click to toggle */}
             <div
-              className="flex items-center gap-3 cursor-pointer"
-              onClick={() => setDropdownOpen((prev) => !prev)}
+              onClick={toggleDropdown}
+              className="flex items-center gap-3 cursor-pointer p-2 hover:bg-gray-50 rounded-lg transition"
             >
-              <div className="w-10 h-10 rounded-full bg-purple-500 overflow-hidden flex items-center justify-center">
-                {avatarUrl ? (
-                  <img
-                    src={avatarUrl}
-                    alt="avatar"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-white font-bold uppercase">
-                    {adminName.charAt(0)}
-                  </span>
-                )}
-              </div>
               <div className="text-right">
-                <p className="text-sm font-semibold capitalize">{adminName}</p>
+                <p className="text-sm font-bold text-gray-800">{adminName}</p>
+                <p className="text-[10px] text-green-500 font-bold uppercase">Online</p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold shadow-md">
+                A
               </div>
             </div>
 
-            {/* Dropdown */}
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg z-10">
-                <button
-                  onClick={() => {
-                    navigate("/profile");
-                    setDropdownOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                >
-                  Profile
-                </button>
+            {/* Dropdown Menu - THIS IS WHERE YOU PUT THE LINK */}
+            <div
+              className={`absolute right-0 mt-1 w-44 bg-white shadow-xl rounded-xl border border-gray-100 transition-all z-50 p-1 ${
+                dropdownOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+              }`}
+            >
+              
+              {/* REPLACED BUTTON WITH LINK */}
+              <Link 
+                to="/profile" 
+                className="block w-full text-left px-4 py-2 text-sm font-medium text-gray-600 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition"
+              >
+                👤 View Profile
+              </Link>
 
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+              <Link 
+                to="/settings" 
+                className="block w-full text-left px-4 py-2 text-sm font-medium text-gray-600 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition"
+              >
+                ⚙️ Settings
+              </Link>
+
+              <hr className="my-1 border-gray-50" />
+
+              <button 
+                onClick={handleLogout}
+                className="block w-full text-left px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50 rounded-lg transition"
+              >
+                🚪 Logout
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Page Content */}
-        <div className="flex-1 p-6 overflow-auto bg-gray-100">
+        {/* Outlet for pages */}
+        <div className="flex-1 p-8 overflow-auto bg-gray-50">
           <Outlet />
         </div>
       </div>

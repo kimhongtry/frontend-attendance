@@ -37,14 +37,13 @@ const Dashboard = () => {
     };
     fetchStats();
   }, []);
+
   const rawRate =
     dashboardData.totalTeachers > 0
       ? Math.round(
           (dashboardData.presentToday / dashboardData.totalTeachers) * 100,
         )
       : 0;
-
-  // This line ensures the rate never goes above 100%
   const attendanceRate = Math.min(rawRate, 100);
 
   if (loading) return <div className="p-8 text-center">Loading...</div>;
@@ -106,37 +105,49 @@ const Dashboard = () => {
 
       {/* Recent Attendance Table */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <h3 className="text-gray-700 font-bold mb-4">Recent Attendance</h3>
-        <table className="w-full text-left">
-          <thead>
-            <tr className="text-gray-400 text-sm border-b border-gray-100">
-              <th className="pb-4 font-medium">Teacher</th>
-              <th className="pb-4 font-medium">Status</th>
-              <th className="pb-4 font-medium">Time</th>
-              <th className="pb-4 font-medium">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dashboardData.records.map((row: any, idx: number) => (
-              <tr
-                key={idx}
-                className="border-b border-gray-50 last:border-0 hover:bg-gray-50"
-              >
-                <td className="py-4 font-medium">{row.name}</td>
-                <td className="py-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-bold text-white 
-                    ${row.status === "Present" ? "bg-green-500" : row.status === "Absent" ? "bg-red-500" : "bg-yellow-500"}`}
-                  >
-                    {row.status}
-                  </span>
-                </td>
-                <td className="py-4 text-gray-500">{row.time}</td>
-                <td className="py-4 text-gray-500">{row.date}</td>
+        {/* Changed title to show Yesterday */}
+        <h3 className="text-gray-700 font-bold mb-4">
+          Yesterday's Attendance (Apr 2)
+        </h3>
+
+        <div className="max-h-[400px] overflow-y-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="text-gray-400 text-sm border-b border-gray-100">
+                <th className="pb-4">Teacher</th>
+                <th className="pb-4">Status</th>
+                <th className="pb-4">Time</th>
+                <th className="pb-4">Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {dashboardData.records.map((row: any, idx: number) => (
+                <tr
+                  key={idx}
+                  className="border-b border-gray-50 hover:bg-gray-50"
+                >
+                  <td className="py-4 font-medium">{row.name}</td>
+                  <td className="py-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-bold text-white 
+                ${
+                  row.status.toLowerCase() === "present"
+                    ? "bg-green-500"
+                    : row.status.toLowerCase() === "absent"
+                      ? "bg-red-500"
+                      : "bg-yellow-500"
+                }`}
+                    >
+                      {row.status}
+                    </span>
+                  </td>
+                  <td className="py-4 text-gray-500">{row.time}</td>
+                  <td className="py-4 text-gray-500">{row.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
