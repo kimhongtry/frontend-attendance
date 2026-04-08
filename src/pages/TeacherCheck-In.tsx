@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
+
 const BASE_URL = "http://192.168.11.36:5000";
 
 const TeacherCheckIn = () => {

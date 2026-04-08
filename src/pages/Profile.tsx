@@ -18,6 +18,7 @@ const token = localStorage.getItem("admin_token");
 
 const ProfilePage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isViewOpen, setIsViewOpen] = useState(false);
 
   const [profile, setProfile] = useState({
     username: "",
@@ -220,7 +221,11 @@ const ProfilePage = () => {
         {/* ── Avatar & Name Card ── */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex items-center gap-6">
           <div className="relative flex-shrink-0 group/avatar">
-            <div className="w-20 h-20 rounded-full overflow-hidden bg-indigo-600 flex items-center justify-center">
+            {/* The Avatar Container */}
+            <div
+              className="w-20 h-20 rounded-full overflow-hidden bg-indigo-600 flex items-center justify-center cursor-pointer border-2 border-transparent hover:border-indigo-400 transition-all"
+              onClick={() => profile.profile_image && setIsViewOpen(true)} // Open viewer on click
+            >
               {profile.profile_image ? (
                 <img
                   src={profile.profile_image}
@@ -233,13 +238,28 @@ const ProfilePage = () => {
                 </span>
               )}
             </div>
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={avatarLoading}
-              className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity disabled:cursor-not-allowed"
-            >
-              <CameraIcon className="w-6 h-6 text-white" />
-            </button>
+
+            {/* Buttons overlay (Camera for change, Eye for view) */}
+            <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center gap-2 opacity-0 group-hover/avatar:opacity-100 transition-opacity pointer-events-none group-hover/avatar:pointer-events-auto">
+              {profile.profile_image && (
+                <button
+                  onClick={() => setIsViewOpen(true)}
+                  className="p-1.5 bg-white/20 hover:bg-white/40 rounded-full text-white transition-colors"
+                  title="View Picture"
+                >
+                  <EyeIcon className="w-5 h-5" />
+                </button>
+              )}
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={avatarLoading}
+                className="p-1.5 bg-white/20 hover:bg-white/40 rounded-full text-white transition-colors"
+                title="Change Picture"
+              >
+                <CameraIcon className="w-5 h-5" />
+              </button>
+            </div>
+
             <input
               ref={fileInputRef}
               type="file"
@@ -248,21 +268,38 @@ const ProfilePage = () => {
               onChange={handleAvatarChange}
             />
           </div>
+
           <div>
             <h2 className="text-2xl font-bold text-gray-900 capitalize">
               {profile.username}
             </h2>
-            <div className="flex items-center gap-2 mt-1">
-              <ShieldCheckIcon className="w-4 h-4 text-indigo-500" />
-              <span className="text-sm text-indigo-600 font-semibold">
-                System Administrator
-              </span>
-            </div>
             <p className="text-sm text-gray-400 mt-1">
               PSE Teacher Attendance System
             </p>
           </div>
         </div>
+
+        {/* --- IMAGE VIEWER MODAL --- */}
+        {isViewOpen && profile.profile_image && (
+          <div
+            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
+            onClick={() => setIsViewOpen(false)}
+          >
+            <button
+              className="absolute top-6 right-6 text-white/70 hover:text-white"
+              onClick={() => setIsViewOpen(false)}
+            >
+              <XMarkIcon className="w-10 h-10" />
+            </button>
+
+            <img
+              src={profile.profile_image}
+              alt="Full Profile"
+              className="max-w-full max-h-[90vh] rounded-lg shadow-2xl object-contain animate-in zoom-in-95 duration-300"
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image itself
+            />
+          </div>
+        )}
 
         {/* ── Account Info Card ── */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
