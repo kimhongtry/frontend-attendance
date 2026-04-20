@@ -260,7 +260,7 @@ const ReportsPage = () => {
           {/* Excel Button */}
           <button
             onClick={handleExportExcel}
-            className="flex items-center gap-2 px-4 py-2.5 border border-green-200 text-green-600 bg-green-50 rounded-xl font-bold text-sm hover:bg-green-100 transition-colors"
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-sm"
           >
             <DocumentArrowDownIcon className="w-4 h-4" />
             Export Excel
@@ -269,7 +269,7 @@ const ReportsPage = () => {
           {/* PDF Button */}
           <button
             onClick={handleExportPDF}
-            className="flex items-center gap-2 px-4 py-2.5 border border-red-200 text-red-600 bg-red-50 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors"
+            className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-sm"
           >
             <DocumentArrowDownIcon className="w-4 h-4" />
             Export PDF
