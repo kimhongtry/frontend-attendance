@@ -10,8 +10,6 @@ import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
-const BASE_URL = "http://192.168.11.36:5000";
-
 // ── Types ──────────────────────────────────────────────────────────────
 interface DailyRecord {
   teacherId: number;
@@ -39,6 +37,7 @@ interface WeeklyReport {
   records: WeeklyRecord[];
 }
 
+const BASE_URL = "http://192.168.11.41:5000";
 
 // ── Helpers ────────────────────────────────────────────────────────────
 const getWeekRange = () => {
@@ -54,7 +53,6 @@ const getWeekRange = () => {
   };
 };
 
-
 const formatDate = (dateStr: string) =>
   new Date(dateStr).toLocaleDateString("en-US", {
     month: "long",
@@ -62,7 +60,6 @@ const formatDate = (dateStr: string) =>
     year: "numeric",
   });
 
-  
 const formatWeekRange = (start: string, end: string) => {
   const s = new Date(start).toLocaleDateString("en-US", {
     month: "long",
@@ -100,15 +97,15 @@ const ReportsPage = () => {
     }
 
     // Map the data to clean headers for Excel
-    const dataToExport = sortedWeekly.map(row => {
+    const dataToExport = sortedWeekly.map((row) => {
       const total = row.present + row.absent + row.permission;
       const rate = total > 0 ? Math.round((row.present / total) * 100) : 0;
       return {
         "Teacher Name": row.teacherName,
         "Present Days": row.present,
         "Absent Days": row.absent,
-        "Permission": row.permission,
-        "Attendance Rate": `${rate}%`
+        Permission: row.permission,
+        "Attendance Rate": `${rate}%`,
       };
     });
 
@@ -132,11 +129,17 @@ const ReportsPage = () => {
 
     autoTable(doc, {
       startY: 30,
-      head: [['Teacher Name', 'Present', 'Absent', 'Permission', 'Rate']],
-      body: sortedWeekly.map(row => {
+      head: [["Teacher Name", "Present", "Absent", "Permission", "Rate"]],
+      body: sortedWeekly.map((row) => {
         const total = row.present + row.absent + row.permission;
         const rate = total > 0 ? Math.round((row.present / total) * 100) : 0;
-        return [row.teacherName, row.present, row.absent, row.permission, `${rate}%`];
+        return [
+          row.teacherName,
+          row.present,
+          row.absent,
+          row.permission,
+          `${rate}%`,
+        ];
       }),
       headStyles: { fillColor: [99, 102, 241] }, // Indigo/Purple theme
     });
@@ -246,33 +249,33 @@ const ReportsPage = () => {
       <Toaster position="top-right" />
 
       {/* Header */}
-    <div className="flex justify-between items-start mb-6">
-  <div>
-    <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
-    <p className="text-gray-500 mt-1">
-      View attendance reports and analytics
-    </p>
-  </div>
-  <div className="flex gap-3">
-    {/* Excel Button */}
-    <button 
-      onClick={handleExportExcel}
-      className="flex items-center gap-2 px-4 py-2.5 border border-green-200 text-green-600 bg-green-50 rounded-xl font-bold text-sm hover:bg-green-100 transition-colors"
-    >
-      <DocumentArrowDownIcon className="w-4 h-4" />
-      Export Excel
-    </button>
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
+          <p className="text-gray-500 mt-1">
+            View attendance reports and analytics
+          </p>
+        </div>
+        <div className="flex gap-3">
+          {/* Excel Button */}
+          <button
+            onClick={handleExportExcel}
+            className="flex items-center gap-2 px-4 py-2.5 border border-green-200 text-green-600 bg-green-50 rounded-xl font-bold text-sm hover:bg-green-100 transition-colors"
+          >
+            <DocumentArrowDownIcon className="w-4 h-4" />
+            Export Excel
+          </button>
 
-    {/* PDF Button */}
-    <button 
-      onClick={handleExportPDF}
-      className="flex items-center gap-2 px-4 py-2.5 border border-red-200 text-red-600 bg-red-50 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors"
-    >
-      <DocumentArrowDownIcon className="w-4 h-4" />
-      Export PDF
-    </button>
-  </div>
-</div>
+          {/* PDF Button */}
+          <button
+            onClick={handleExportPDF}
+            className="flex items-center gap-2 px-4 py-2.5 border border-red-200 text-red-600 bg-red-50 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors"
+          >
+            <DocumentArrowDownIcon className="w-4 h-4" />
+            Export PDF
+          </button>
+        </div>
+      </div>
       {/* Alerts */}
       {absentAlert.length > 0 && (
         <div className="bg-orange-50 border border-orange-100 p-4 rounded-xl mb-8 flex items-start gap-3 shadow-sm">

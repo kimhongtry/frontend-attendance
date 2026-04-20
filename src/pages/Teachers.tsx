@@ -17,6 +17,8 @@ interface Teacher {
   room: string;
 }
 
+const BASE_URL = "http://192.168.11.41:5000";
+
 const TeachersPage = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,7 +40,7 @@ const TeachersPage = () => {
   const fetchTeachers = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/teachers/all", {
+      const response = await fetch(`${BASE_URL}/api/teachers/all`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -95,8 +97,8 @@ const TeachersPage = () => {
 
     // Determine URL and Method based on mode (Edit vs Add)
     const url = editingId
-      ? `http://localhost:5000/api/teachers/${editingId}` // PUT /api/teachers/:id
-      : `http://localhost:5000/api/teachers/add`; // POST /api/teachers/add
+      ? `${BASE_URL}/api/teachers/${editingId}` // PUT /api/teachers/:id
+      : `${BASE_URL}/api/teachers/add`; // POST /api/teachers/add
 
     const method = editingId ? "PUT" : "POST";
 
@@ -140,13 +142,13 @@ const TeachersPage = () => {
     toast(
       (t) => (
         <div className="flex flex-col gap-3">
-          <p className="text-sm font-medium text-gray-900">
+          <p className="text-sm font-medium text-gray-700">
             Are you sure you want to delete this teacher?
           </p>
           <div className="flex justify-end gap-2">
             <button
               onClick={() => toast.dismiss(t.id)}
-              className="px-3 py-1 text-xs font-semibold text-gray-500 hover:bg-gray-100 rounded-md transition-colors"
+              className="px-3 py-1 text-xs font-semibold text-gray-00 hover:bg-gray-100 rounded-md transition-colors"
             >
               Cancel
             </button>
@@ -177,7 +179,7 @@ const TeachersPage = () => {
   const proceedWithDelete = async (id: number) => {
     const tid = toast.loading("Deleting record...");
     try {
-      const resp = await fetch(`http://localhost:5000/api/teachers/${id}`, {
+      const resp = await fetch(`${BASE_URL}/api/teachers/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -194,13 +196,13 @@ const TeachersPage = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen font-sans text-gray-900 relative">
+    <div className="p-8 bg-gray-50 min-h-screen font-sans text-gray-700 relative">
       <Toaster position="top-right" reverseOrder={false} />
 
       {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-indigo-900">
+          <h1 className="text-3xl font-bold tracking-tight text-indigo-600">
             Teachers
           </h1>
           <p className="text-gray-500 mt-1">
@@ -217,7 +219,7 @@ const TeachersPage = () => {
         <div className="flex gap-3">
           <button
             onClick={fetchTeachers}
-            className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-100 transition-all shadow-sm"
+            className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-900 hover:bg-gray-100 transition-all shadow-sm"
           >
             <ArrowPathIcon
               className={`w-5 h-5 ${loading ? "animate-spin" : ""}`}
@@ -238,7 +240,7 @@ const TeachersPage = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="text-gray-400 text-xs uppercase tracking-widest bg-gray-50/50">
+              <tr className="text-gray-700 text-xs uppercase tracking-widest bg-gray-50/50">
                 <th className="px-6 py-4 font-semibold">Staff ID</th>
                 <th className="px-6 py-4 font-semibold">Name</th>
                 <th className="px-6 py-4 font-semibold">Subject</th>
@@ -253,18 +255,22 @@ const TeachersPage = () => {
                     key={teacher.id}
                     className="hover:bg-gray-50/80 transition-colors"
                   >
-                    <td className="px-6 py-4 font-mono text-xs text-indigo-500 font-bold">
+                    <td className="px-6 py-4 font-mono text-xs text-indigo-600 font-bold uppercase">
+                      {/* staffId usually looks better in all Uppercase */}
                       {teacher.staffId}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-gray-900">
+                    <td className="px-6 py-4 font-semibold text-gray-900 capitalize">
+                      {/* Forces Name to: "Try Kimhong" */}
                       {teacher.name}
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md font-medium">
+                      <span className="text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md font-medium capitalize">
+                        {/* Forces Subject to: "Mathematics" */}
                         {teacher.subject}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-600 italic">
+                    <td className="px-6 py-4 text-gray-600 capitalize">
+                      {/* Forces Room to: "Room 101" */}
                       {teacher.room}
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -307,13 +313,13 @@ const TeachersPage = () => {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
                     Staff ID
                   </label>
                   <input
                     required
                     type="text"
-                    className="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-600"
                     value={formData.staffId}
                     onChange={(e) =>
                       setFormData({ ...formData, staffId: e.target.value })
@@ -321,13 +327,13 @@ const TeachersPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
                     Room
                   </label>
                   <input
                     required
                     type="text"
-                    className="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-600"
                     value={formData.room}
                     onChange={(e) =>
                       setFormData({ ...formData, room: e.target.value })
@@ -336,7 +342,7 @@ const TeachersPage = () => {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
                   Full Name
                 </label>
                 <input
@@ -350,7 +356,7 @@ const TeachersPage = () => {
                 />
               </div>
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
                   Subject
                 </label>
                 <input
@@ -365,7 +371,7 @@ const TeachersPage = () => {
               </div>
               <button
                 type="submit"
-                className="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold mt-4 hover:bg-indigo-700 transition-all shadow-lg"
+                className="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold mt-4 hover:bg-indigo-600 transition-all shadow-lg"
               >
                 {editingId ? "Update Information" : "Register Teacher"}
               </button>

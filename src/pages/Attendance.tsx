@@ -23,13 +23,11 @@ interface AttendanceRecord {
   checkInMethod: string;
 }
 
-const BASE_URL = "http://192.168.11.36:5000";
-// const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://192.168.11.41:5000";
 
 const AttendancePage = () => {
   const [activeTab, setActiveTab] = useState("manual");
   const [showQRModal, setShowQRModal] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(40);
 
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [attendanceData, setAttendanceData] = useState<Record<number, string>>(
@@ -189,16 +187,6 @@ const AttendancePage = () => {
   const permissionCount = Object.values(attendanceData).filter(
     (v) => v === "permission",
   ).length;
-
-  // ─── QR countdown timer ──────────────────────────────────────────────
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (showQRModal && timeLeft > 0) {
-      timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-    }
-    if (timeLeft === 0) setTimeLeft(40);
-    return () => clearInterval(timer);
-  }, [showQRModal, timeLeft]);
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen font-sans text-gray-900 relative">
@@ -443,10 +431,9 @@ const AttendancePage = () => {
 
           <button
             onClick={() => {
-              setTimeLeft(40);
               setShowQRModal(true);
             }}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-xl shadow-indigo-100 transition-all active:scale-95"
+            className="w-full bg-indigo-600 hover:bg-indigo-600 text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-xl shadow-indigo-100 transition-all active:scale-95"
           >
             <QrCodeIcon className="w-7 h-7" />
             Launch QR Check-In Terminal
@@ -482,17 +469,10 @@ const AttendancePage = () => {
                   className="w-56 h-56"
                 />
               </div>
-              <p className="text-xs text-gray-400 mb-3 font-mono">
-                192.168.11.36:3000/checkin
-              </p>
-              <div className="flex items-center gap-2 text-indigo-600 bg-indigo-50 px-6 py-2 rounded-full font-bold text-sm animate-pulse">
-                <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
-                Auto-syncing every 5s · display refresh in {timeLeft}s
-              </div>
             </div>
             <div className="p-6">
               <a
-                href={`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=http://192.168.11.36:3000/checkin&download=1`}
+                href={`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=http://192.168.11.41:3000/checkin&download=1`}
                 download="attendance-qr.png"
                 className="w-full border-2 border-gray-100 text-gray-600 py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-gray-50 transition-all"
               >

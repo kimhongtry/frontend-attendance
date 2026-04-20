@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
 
+const BASE_URL = "http://192.168.11.36:5000";
+
 const TeacherCheckIn = () => {
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const token = localStorage.getItem("teacher_token"); // Teachers must login once on their phone
@@ -18,8 +20,7 @@ const TeacherCheckIn = () => {
 
     try {
       const response = await fetch(
-        "http://192.168.11.36:5000/api/attendance/qr-checkin", // ✅ Updated to your real IP
-        // "http://localhost:5000/api/attendance/qr-checkin",
+        `${BASE_URL}/api/attendance/qr-checkin`, // ✅ Updated to your real IP
         {
           method: "POST",
           headers: {

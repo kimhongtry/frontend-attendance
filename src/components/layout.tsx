@@ -10,9 +10,9 @@ const Layout = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const activeClass =
-    "flex items-center gap-2 p-2 rounded-lg bg-purple-500 text-white font-semibold";
+    "flex items-center gap-2 p-2 rounded-lg bg-indigo-600  text-white font-semibold";
   const normalClass =
-    "flex items-center gap-2 p-2 rounded-lg hover:bg-purple-200";
+    "flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-200";
 
   const [adminName, setAdminName] = useState("Admin");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -73,7 +73,7 @@ const Layout = () => {
       {/* Sidebar */}
       <div className="w-64 bg-white shadow-md flex flex-col">
         <div className="p-4">
-          <h1 className="text-xl font-bold text-purple-600 mb-6">
+          <h1 className="text-xl font-bold text-indigo-600 mb-6">
             Teacher Attendance
           </h1>
           <nav className="flex flex-col gap-2">
@@ -124,7 +124,7 @@ const Layout = () => {
               className="flex items-center gap-3 cursor-pointer"
               onClick={() => setDropdownOpen((prev) => !prev)}
             >
-              <div className="w-10 h-10 rounded-full bg-purple-500 overflow-hidden flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-indigo-600 overflow-hidden flex items-center justify-center">
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
