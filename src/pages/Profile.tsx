@@ -14,7 +14,7 @@ import {
   EyeSlashIcon,
 } from "@heroicons/react/24/outline";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://192.168.11.41:5000";
+const BASE_URL = process.env.REACT_APP_API_URL;
 const token = localStorage.getItem("admin_token");
 
 const ProfilePage = () => {

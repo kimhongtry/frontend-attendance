@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import StatCard from "../components/StatCard";
 
-const BASE_URL = "http://192.168.11.41:5000";
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
     totalTeachers: 0,

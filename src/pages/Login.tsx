@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ShieldCheck, Eye, EyeOff, LogIn } from "lucide-react"; // Install lucide-react or use similar icons
 
-const BASE_URL = "http://192.168.11.41:5000";
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");

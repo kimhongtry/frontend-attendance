@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
 
-const BASE_URL = "http://192.168.11.41:5000";
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const TeacherCheckIn = () => {
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
