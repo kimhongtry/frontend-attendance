@@ -205,7 +205,7 @@ const TeachersPage = () => {
           <h1 className="text-3xl font-bold tracking-tight text-indigo-600">
             Teachers
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-gray-600 mt-1">
             Manage staff information and room locations
           </p>
           <input
@@ -240,7 +240,7 @@ const TeachersPage = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="text-gray-700 text-xs uppercase tracking-widest bg-gray-50/50">
+              <tr className="text-gray-800 text-xs uppercase tracking-widest bg-gray-50/50">
                 <th className="px-6 py-4 font-semibold">Staff ID</th>
                 <th className="px-6 py-4 font-semibold">Name</th>
                 <th className="px-6 py-4 font-semibold">Subject</th>
@@ -269,7 +269,7 @@ const TeachersPage = () => {
                         {teacher.subject}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-600 capitalize">
+                    <td className="px-6 py-4 text-gray-800 capitalize">
                       {/* Forces Room to: "Room 101" */}
                       {teacher.room}
                     </td>
@@ -307,13 +307,13 @@ const TeachersPage = () => {
                 {editingId ? "Update Teacher" : "Add New Teacher"}
               </h2>
               <button onClick={closeModal}>
-                <XMarkIcon className="w-6 h-6 text-gray-400 hover:text-gray-600" />
+                <XMarkIcon className="w-6 h-6 text-gray-700 hover:text-gray-600" />
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-800">
                     Staff ID
                   </label>
                   <input
@@ -327,7 +327,7 @@ const TeachersPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-800">
                     Room
                   </label>
                   <input
@@ -342,7 +342,7 @@ const TeachersPage = () => {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                <label className="text-xs font-bold uppercase tracking-wider text-gray-800">
                   Full Name
                 </label>
                 <input
@@ -356,7 +356,7 @@ const TeachersPage = () => {
                 />
               </div>
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                <label className="text-xs font-bold uppercase tracking-wider text-gray-800">
                   Subject
                 </label>
                 <input

@@ -90,7 +90,7 @@ const Dashboard = () => {
           <span className="text-4xl font-black text-gray-800">
             {attendanceRate}%
           </span>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-600">
             {dashboardData.presentToday} out of {dashboardData.totalTeachers}
           </span>
         </div>
@@ -112,7 +112,7 @@ const Dashboard = () => {
         <div className="max-h-[400px] overflow-y-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="text-gray-400 text-sm border-b border-gray-100">
+              <tr className="text-gray-600 text-sm border-b border-gray-100">
                 <th className="pb-4">Teacher</th>
                 <th className="pb-4">Status</th>
                 <th className="pb-4">Time</th>
@@ -140,8 +140,8 @@ const Dashboard = () => {
                       {row.status}
                     </span>
                   </td>
-                  <td className="py-4 text-gray-500">{row.time}</td>
-                  <td className="py-4 text-gray-500">{row.date}</td>
+                  <td className="py-4 text-gray-600">{row.time}</td>
+                  <td className="py-4 text-gray-600">{row.date}</td>
                 </tr>
               ))}
             </tbody>

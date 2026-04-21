@@ -251,8 +251,8 @@ const ReportsPage = () => {
       {/* Header */}
       <div className="flex justify-between items-start mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-3xl font-bold text-indigo-600">Reports</h1>
+          <p className="text-gray-600 mt-1">
             View attendance reports and analytics
           </p>
         </div>
@@ -269,7 +269,7 @@ const ReportsPage = () => {
           {/* PDF Button */}
           <button
             onClick={handleExportPDF}
-            className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-sm"
+            className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-sm"
           >
             <DocumentArrowDownIcon className="w-4 h-4" />
             Export PDF
@@ -298,12 +298,12 @@ const ReportsPage = () => {
           <div className="flex justify-between items-start mb-6">
             <div>
               <h3 className="text-lg font-bold text-gray-800">Daily Report</h3>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-gray-600">
                 {formatDate(selectedDate)}
               </p>
             </div>
             <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-xl px-3 py-2">
-              <CalendarDaysIcon className="w-4 h-4 text-gray-400" />
+              <CalendarDaysIcon className="w-4 h-4 text-gray-600" />
               <input
                 type="date"
                 value={selectedDate}
@@ -315,11 +315,11 @@ const ReportsPage = () => {
           </div>
 
           {dailyLoading ? (
-            <div className="py-16 text-center text-gray-400 animate-pulse">
+            <div className="py-16 text-center text-gray-600 animate-pulse">
               Loading...
             </div>
           ) : !dailyReport || dailyReport.records.length === 0 ? (
-            <div className="py-16 text-center text-gray-400">
+            <div className="py-16 text-center text-gray-600">
               No attendance recorded for this date.
             </div>
           ) : (
@@ -428,13 +428,13 @@ const ReportsPage = () => {
           <div className="flex justify-between items-start mb-6">
             <div>
               <h3 className="text-lg font-bold text-gray-800">Weekly Report</h3>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-gray-600">
                 {formatWeekRange(weekStart, weekEnd)} · Sorted by Present Days
               </p>
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-xl px-3 py-1.5">
-                <span className="text-xs text-gray-400">From</span>
+                <span className="text-xs text-gray-600">From</span>
                 <input
                   type="date"
                   value={weekStart}
@@ -444,7 +444,7 @@ const ReportsPage = () => {
                 />
               </div>
               <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-xl px-3 py-1.5">
-                <span className="text-xs text-gray-400">To</span>
+                <span className="text-xs text-gray-600">To</span>
                 <input
                   type="date"
                   value={weekEnd}
@@ -458,7 +458,7 @@ const ReportsPage = () => {
           </div>
 
           {weeklyLoading ? (
-            <div className="py-16 text-center text-gray-400 animate-pulse">
+            <div className="py-16 text-center text-gray-600 animate-pulse">
               Loading...
             </div>
           ) : sortedWeekly.length === 0 ? (
@@ -469,12 +469,12 @@ const ReportsPage = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="text-gray-400 text-[10px] uppercase tracking-wider border-b border-gray-50">
-                    <th className="pb-4 font-semibold">Teacher</th>
-                    <th className="pb-4 font-semibold text-center">Present</th>
-                    <th className="pb-4 font-semibold text-center">Absent</th>
-                    <th className="pb-4 font-semibold text-center">Perm.</th>
-                    <th className="pb-4 font-semibold text-center">Rate</th>
+                  <tr className="text-gray-600 text-[10px] uppercase tracking-wider border-b border-gray-50">
+                    <th className="pb-4 font-bold">Teacher</th>
+                    <th className="pb-4 font-bold text-center">Present</th>
+                    <th className="pb-4 font-bold text-center">Absent</th>
+                    <th className="pb-4 font-bold text-center">Perm.</th>
+                    <th className="pb-4 font-bold text-center">Rate</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">

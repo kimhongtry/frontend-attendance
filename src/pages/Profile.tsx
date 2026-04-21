@@ -214,8 +214,8 @@ const ProfilePage = () => {
       <Toaster position="top-right" />
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-        <p className="text-gray-500 mt-1">Manage your account settings</p>
+        <h1 className="text-3xl font-bold text-indigo-600">Profile</h1>
+        <p className="text-gray-600 mt-1">Manage your account settings</p>
       </div>
 
       <div className="max-w-2xl space-y-6">
@@ -274,7 +274,7 @@ const ProfilePage = () => {
             <h2 className="text-2xl font-bold text-gray-900 capitalize">
               {profile.username}
             </h2>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-sm text-gray-600 mt-1">
               PSE Teacher Attendance System
             </p>
           </div>
@@ -305,7 +305,7 @@ const ProfilePage = () => {
         {/* ── Account Info Card ── */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-widest">
               Account Information
             </h3>
             {!editingInfo && (
@@ -321,9 +321,9 @@ const ProfilePage = () => {
           {!editingInfo ? (
             <div className="space-y-4">
               <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                <UserCircleIcon className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <UserCircleIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase">
+                  <p className="text-xs text-gray-600 font-semibold uppercase">
                     Username
                   </p>
                   <p className="text-gray-800 font-semibold capitalize">
@@ -332,18 +332,18 @@ const ProfilePage = () => {
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                <EnvelopeIcon className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <EnvelopeIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase">
+                  <p className="text-xs text-gray-600 font-semibold uppercase">
                     Email
                   </p>
                   <p className="text-gray-800 font-semibold">{profile.email}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                <ShieldCheckIcon className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <ShieldCheckIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase">
+                  <p className="text-xs text-gray-600 font-semibold uppercase">
                     Role
                   </p>
                   <p className="text-gray-800 font-semibold">Administrator</p>
@@ -353,7 +353,7 @@ const ProfilePage = () => {
           ) : (
             <div className="space-y-3">
               <div>
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
                   Username
                 </label>
                 <input
@@ -366,7 +366,7 @@ const ProfilePage = () => {
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
                   Email
                 </label>
                 <input
@@ -408,7 +408,7 @@ const ProfilePage = () => {
         {/* ── Security Card ── */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-widest">
               Security
             </h3>
             {!editingPassword && (
@@ -424,9 +424,9 @@ const ProfilePage = () => {
 
           {!editingPassword ? (
             <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-              <LockClosedIcon className="w-5 h-5 text-gray-400 flex-shrink-0" />
+              <LockClosedIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
               <div>
-                <p className="text-xs text-gray-400 font-semibold uppercase">
+                <p className="text-xs text-gray-600 font-semibold uppercase">
                   Password
                 </p>
                 <p className="text-gray-800 font-semibold">••••••••</p>
@@ -436,7 +436,7 @@ const ProfilePage = () => {
             <div className="space-y-3">
               {passwordFields.map(({ key, label, placeholder }) => (
                 <div key={key}>
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                  <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
                     {label}
                   </label>
                   <div className="relative mt-1">
