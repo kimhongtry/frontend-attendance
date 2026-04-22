@@ -463,7 +463,7 @@ const AttendancePage = () => {
             <div className="p-10 flex flex-col items-center bg-gray-50/50">
               <div className="bg-white p-6 rounded-3xl shadow-inner border border-gray-100 mb-6">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=http://192.168.11.36:3000/checkin`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=http://192.168.11.41:3000/checkin`}
                   alt="Attendance QR Code"
                   className="w-56 h-56"
                 />

@@ -5,7 +5,6 @@ import Reports from "./pages/Reports";
 import Layout from "./components/layout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import TeacherCheckIn from "./pages/TeacherCheck-In";
 import PublicCheckIn from "./pages/PublicCheck-In";
 import ProfilePage from "./pages/Profile";
 
@@ -30,7 +29,6 @@ function App() {
           <Route path="teachers" element={<Teachers />} />
           <Route path="attendance" element={<Attendance />} />
           <Route path="reports" element={<Reports />} />
-          <Route path="check-in" element={<TeacherCheckIn />} />
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="profile" element={<ProfilePage />} />
         </Route>

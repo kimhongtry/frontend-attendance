@@ -31,7 +31,7 @@ const PublicCheckIn = () => {
 
     try {
       const response = await fetch(
-        `${BASE_URL}/api/attendance/public-checkin`, // ✅ FIXED: correct route
+        `${BASE_URL}/api/attendance/public-checkin`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
