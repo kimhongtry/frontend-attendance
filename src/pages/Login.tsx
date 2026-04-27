@@ -58,11 +58,11 @@ const Login: React.FC = () => {
           {/* Email Field */}
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">
-              Username
+              Email
             </label>
             <input
               type="email"
-              placeholder="Enter your username"
+              placeholder="Enter your email"
               required
               className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
               value={email}
