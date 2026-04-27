@@ -442,17 +442,25 @@ const AttendancePage = () => {
 
       {/* ── QR Modal ── */}
       {showQRModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+        /* 1. Added onClick to the background to close the modal if user clicks outside */
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          onClick={() => setShowQRModal(false)}
+        >
+          {/* 2. Added stopPropagation so clicking the white box doesn't close the modal */}
+          <div
+            className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="p-6 flex justify-between items-center border-b border-gray-100">
               <div>
                 <h2 className="text-xl font-bold text-gray-800">
                   Scan QR Code
                 </h2>
-                <p className="text-xs text-green-500 mt-0.5">
-                  {presentCount} checked in · {unmarkedCount} remaining
-                </p>
+                <p className="text-xs text-green-500 mt-0.5">Terminal Active</p>
               </div>
+
+              {/* 3. ENSURE THIS BUTTON HAS THE ONCLICK BELOW */}
               <button
                 onClick={() => setShowQRModal(false)}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -460,18 +468,20 @@ const AttendancePage = () => {
                 <XMarkIcon className="w-6 h-6 text-gray-600" />
               </button>
             </div>
+
             <div className="p-10 flex flex-col items-center bg-gray-50/50">
               <div className="bg-white p-6 rounded-3xl shadow-inner border border-gray-100 mb-6">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=http://192.168.11.41:3000/checkin`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${window.location.origin}/checkin`}
                   alt="Attendance QR Code"
                   className="w-56 h-56"
                 />
               </div>
             </div>
+
             <div className="p-6">
               <a
-                href={`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=http://192.168.11.41:3000/checkin&download=1`}
+                href={`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${window.location.origin}/checkin&download=1`}
                 download="attendance-qr.png"
                 className="w-full border-2 border-gray-100 text-gray-600 py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-gray-50 transition-all"
               >
