@@ -9,6 +9,9 @@ import {
   XMarkIcon,
   ArrowDownTrayIcon,
   ArrowPathIcon,
+  InformationCircleIcon,
+  XCircleIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 
 interface Teacher {
@@ -266,13 +269,36 @@ const AttendancePage = () => {
             <table className="w-full text-left">
               <thead>
                 <tr className="text-gray-600 text-[10px] uppercase tracking-widest bg-gray-50/50">
-                  <th className="px-8 py-5 font-bold">Teacher Name</th>
-                  <th className="px-4 py-5 font-bold text-center">Present</th>
-                  <th className="px-4 py-5 font-bold text-center">Absent</th>
-                  <th className="px-4 py-5 font-bold text-center">
-                    Permission
+                  <th className="px-8 py-5 font-bold">
+                    <div className="flex items-center gap-2">
+                      <UserIcon className="w-3.5 h-3.5" />
+                      <span>Teacher Name</span>
+                    </div>
                   </th>
-                  <th className="px-4 py-5 font-bold text-center">Method</th>
+                  <th className="px-4 py-5 font-bold">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <CheckCircleIcon className="w-3.5 h-3.5 text-green-500" />
+                      <span>Present</span>
+                    </div>
+                  </th>
+                  <th className="px-4 py-5 font-bold">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <XCircleIcon className="w-3.5 h-3.5 text-red-500" />
+                      <span>Absent</span>
+                    </div>
+                  </th>
+                  <th className="px-4 py-5 font-bold">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <InformationCircleIcon className="w-3.5 h-3.5 text-blue-500" />
+                      <span>Permission</span>
+                    </div>
+                  </th>
+                  <th className="px-4 py-5 font-bold">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <QrCodeIcon className="w-3.5 h-3.5 text-gray-500" />
+                      <span>Method</span>
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">

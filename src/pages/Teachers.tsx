@@ -9,6 +9,13 @@ import {
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 
+// --- ADDED: Error state interface ---
+interface FormErrors {
+  staffId?: string;
+  name?: string;
+  subject?: string;
+  room?: string;
+}
 interface Teacher {
   id: number;
   staffId: string;
@@ -25,8 +32,8 @@ const TeachersPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // NEW: State to track if we are editing a specific teacher
-  const [editingId, setEditingId] = useState<number | null>(null);
+  // --- NEW: Validation Error State ---
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const [formData, setFormData] = useState({
     staffId: "",
@@ -35,7 +42,41 @@ const TeachersPage = () => {
     room: "",
   });
 
+  // NEW: State to track if we are editing a specific teacher
+  const [editingId, setEditingId] = useState<number | null>(null);
+
   const token = localStorage.getItem("admin_token");
+  // --- NEW: Validation Logic ---
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    // Staff ID: Required, minimum 3 characters
+    if (!formData.staffId.trim()) {
+      newErrors.staffId = "Staff ID is required";
+    } else if (formData.staffId.length < 3) {
+      newErrors.staffId = "Staff ID must be at least 3 characters";
+    }
+
+    // Name: Required, only letters and spaces
+    if (!formData.name.trim()) {
+      newErrors.name = "Full name is required";
+    } else if (!/^[a-zA-Z\s]*$/.test(formData.name)) {
+      newErrors.name = "Name should only contain letters";
+    }
+
+    // Subject: Required
+    if (!formData.subject.trim()) {
+      newErrors.subject = "Subject is required";
+    }
+
+    // Room: Required
+    if (!formData.room.trim()) {
+      newErrors.room = "Room location is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Returns true if no errors
+  };
 
   const fetchTeachers = useCallback(async () => {
     setLoading(true);
@@ -91,6 +132,11 @@ const TeachersPage = () => {
   // --- UPDATED: Combined Add/Update Logic ---
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // --- EXECUTE VALIDATION ---
+    if (!validateForm()) {
+      toast.error("Please fix the errors in the form");
+      return;
+    }
     const loadingToast = toast.loading(
       editingId ? "Updating teacher..." : "Registering teacher...",
     );
@@ -321,10 +367,16 @@ const TeachersPage = () => {
                     type="text"
                     className="w-full mt-1 p-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-600"
                     value={formData.staffId}
+                    onBlur={validateForm}
                     onChange={(e) =>
                       setFormData({ ...formData, staffId: e.target.value })
                     }
                   />
+                  {errors.staffId && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.staffId}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-gray-800">
@@ -338,7 +390,11 @@ const TeachersPage = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, room: e.target.value })
                     }
+                    onBlur={validateForm}
                   />
+                  {errors.room && (
+                    <p className="text-red-500 text-xs mt-1">{errors.room}</p>
+                  )}
                 </div>
               </div>
               <div>
@@ -353,7 +409,11 @@ const TeachersPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
+                  onBlur={validateForm}
                 />
+                {errors.name && (
+                  <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                )}
               </div>
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-gray-800">
@@ -367,7 +427,11 @@ const TeachersPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, subject: e.target.value })
                   }
+                  onBlur={validateForm}
                 />
+                {errors.subject && (
+                  <p className="text-red-500 text-xs mt-1">{errors.subject}</p>
+                )}
               </div>
               <button
                 type="submit"
